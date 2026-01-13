@@ -14,21 +14,48 @@ let ProfileService = class ProfileService {
         {
             id: (0, crypto_1.randomUUID)(),
             name: 'Brianna Watts',
-            description: `Looking for someone to merge with my heart. I’m a full-stack romantic who refactors my feelings until they pass all tests. Bonus points if you can debug my issues while we pair program over coffee. Let’s commit to something beautiful together.`
+            description: `Looking for someone to merge with my heart. I’m a full-stack romantic who refactors my feelings until they pass all tests.`,
         },
         {
             id: (0, crypto_1.randomUUID)(),
             name: 'Jasper Quinn',
-            description: `Seeking a partner in crime to compile my heart. Must be comfortable with the terminal because I only speak fluent bash. Swipe right if you can appreciate a good kernel panic every now and then.`
+            description: `Seeking a partner in crime to compile my heart. Must be comfortable with the terminal.`,
         },
         {
             id: (0, crypto_1.randomUUID)(),
             name: 'Leo Park',
-            description: `You think you know VIM? Try Neovim. I'll make your modal dreams come true. Want to escape the matrix and explore the perfect keyboard shortcut for love?`
+            description: `You think you know VIM? Try Neovim. I'll make your modal dreams come true.`,
         },
     ];
     findAll() {
         return this.profiles;
+    }
+    findOne(id) {
+        const profile = this.profiles.find(p => p.id === id);
+        if (!profile) {
+            throw new common_1.NotFoundException(`Profile with id ${id} not found`);
+        }
+        return profile;
+    }
+    createProfile(dto) {
+        const newProfile = {
+            id: (0, crypto_1.randomUUID)(),
+            ...dto,
+        };
+        this.profiles.push(newProfile);
+        return newProfile;
+    }
+    updateProfile(id, dto) {
+        const profile = this.findOne(id);
+        Object.assign(profile, dto);
+        return profile;
+    }
+    removeProfile(id) {
+        const index = this.profiles.findIndex(p => p.id === id);
+        if (index === -1) {
+            throw new common_1.NotFoundException(`Profile with id ${id} not found`);
+        }
+        this.profiles.splice(index, 1);
     }
 };
 exports.ProfileService = ProfileService;

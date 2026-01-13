@@ -26,21 +26,17 @@ let ProfileController = class ProfileController {
         return this.profileService.findAll();
     }
     findOne(id) {
-        return { id };
+        return this.profileService.findOne(id);
     }
     create(createProfile) {
-        return {
-            name: createProfile.name,
-            description: createProfile.description
-        };
+        return this.profileService.createProfile(createProfile);
     }
     update(id, updateProfile) {
-        return {
-            id,
-            ...updateProfile
-        };
+        return this.profileService.updateProfile(id, updateProfile);
     }
-    remove(id) { }
+    remove(id) {
+        this.profileService.removeProfile(id);
+    }
 };
 exports.ProfileController = ProfileController;
 __decorate([

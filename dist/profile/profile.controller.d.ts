@@ -10,16 +10,19 @@ export declare class ProfileController {
         description: string;
     }[];
     findOne(id: string): {
-        id: string;
+        id: `${string}-${string}-${string}-${string}-${string}`;
+        name: string;
+        description: string;
     };
     create(createProfile: CreateProfileDto): {
         name: string;
         description: string;
+        id: `${string}-${string}-${string}-${string}-${string}`;
     };
     update(id: string, updateProfile: UpdateProfileDto): {
+        id: `${string}-${string}-${string}-${string}-${string}`;
         name: string;
         description: string;
-        id: string;
     };
     remove(id: string): void;
 }

@@ -1,7 +1,20 @@
-import { Controller,Get,Query ,Param,Post, Body,Put,Delete,HttpCode,HttpStatus} from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import {UpdateProfileDto } from './dto/update-profil.dto';
 import { ProfileService } from './profile.service';
+import { ProfileGuard } from './profile.guard';
 
 @Controller('profile')
 export class ProfileController {
@@ -13,29 +26,29 @@ export class ProfileController {
         return this.profileService.findAll();
     }
     @Get(':id')
-    findOne(@Param('id')id:string){
-        return {id};
-    }
+  findOne(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
+    return this.profileService.findOne(id);
+  }
     @Post()
+    @UseGuards(ProfileGuard)
     create(@Body() createProfile: CreateProfileDto){
-        return {
-            name: createProfile.name,
-            description: createProfile.description
-        }
+        return this.profileService.createProfile(createProfile);
     }
-    @Put(':id')
-    update(@Param('id') id: string, @Body() updateProfile: UpdateProfileDto) {
-        return {
-            id,
-            ...updateProfile
-        };
-    }
-     // DELETE /profiles/:id
+   
+  @Put(':id')
+  @UseGuards(ProfileGuard)
+  update(
+    @Param('id', new ParseUUIDPipe({ version: '4' })) id: string,
+    @Body() updateProfile: UpdateProfileDto,
+  ) {
+    return this.profileService.updateProfile(id, updateProfile);
+  }
+
   @Delete(':id')
-  /* 
-  Challenge:
-    1. Change HttpStatus.OK to use the proper property on HttpStatus that serves back a status code of 204 back to the client
-  */
+  @UseGuards(ProfileGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id') id: string) {}
+  remove(@Param('id', new ParseUUIDPipe({ version: '4' })) id: string) {
+    this.profileService.removeProfile(id);
+  }
 }
+
